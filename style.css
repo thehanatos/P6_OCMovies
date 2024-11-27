@@ -1,0 +1,49 @@
+h1 {
+    color: black;
+}
+.ma-classe {
+    color: #663399;
+}
+#logo {
+    margin-right: 20px;
+    height: auto;
+    width: auto;
+}
+.block-solid {
+    display: grid;
+    grid-template-columns: auto 1fr; /* Deux colonnes : image et texte */
+    align-items: center;
+    justify-content:space-between;
+    border-style: solid;
+    margin: 10px 0;
+    padding: 10px;
+    width: auto;
+    background-color: #61787F;
+}
+#text-logo{
+    font-size: 3rem; /* Taille de texte relative */
+    word-wrap: break-word; /* Permet au texte de s'adapter */
+    color: #FFFFFF;
+}
+.movie-block {
+    border-style: solid;
+    margin: 10px 0;
+    padding: 10px;
+    width: auto;
+}
+body {
+    margin: 50px 100px;
+}
+.image-placeholder{
+    border-radius: 10px;
+}
+::placeholder {
+    border: 1px solid #ccc;
+    /* largeur et couleur de la bordure */
+    padding: 5px;
+    /* marge intérieure */
+    background-color: #f7f7f7;
+    /* couleur de l'arrière-plan */
+    border-radius: 5px;
+    /* arrondi des coins */
+}
