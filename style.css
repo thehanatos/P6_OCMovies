@@ -1,13 +1,19 @@
 h1 {
     color: black;
 }
+
+.pb-gutter {
+    padding-bottom: calc(var(--bs-gutter-y) * 0.5);
+}
+
 .ma-classe {
     color: #663399;
 }
 #logo {
-    margin-right: 20px;
-    height: auto;
+    margin-right: 100px;
+    height: 115px;
     width: auto;
+    padding-left: 90px;
 }
 .block-solid {
     display: grid;
@@ -15,13 +21,12 @@ h1 {
     align-items: center;
     justify-content:space-between;
     border-style: solid;
-    margin: 10px 0;
-    padding: 10px;
     width: auto;
     background-color: #61787F;
+    height: 125px;
 }
 #text-logo{
-    font-size: 3rem; /* Taille de texte relative */
+    font-size: 2rem; /* Taille de texte relative */
     word-wrap: break-word; /* Permet au texte de s'adapter */
     color: #FFFFFF;
 }
