@@ -28,7 +28,14 @@ async function fetchMovieData() {
 
         // Mise à jour du contenu de la modale
         document.getElementById("modal-title").textContent = movieDetails.title;
+        document.getElementById("modal-year").textContent = movieDetails.year;
+        document.getElementById("modal-genre").textContent = movieDetails.genres.join(", ");
+        document.getElementById("modal-pegi").textContent = movieDetails.rated || "N/A";
+        document.getElementById("modal-duration").textContent = `${movieDetails.duration} min`;
+        document.getElementById("modal-imdb").textContent = movieDetails.imdb_score;
+        document.getElementById("modal-director").textContent = movieDetails.directors.join(", ");
         document.getElementById("modal-description").textContent = movieDetails.description || "No description available.";
+        document.getElementById("modal-actors").textContent = movieDetails.actors.join(", ");
         document.getElementById("modal-image").src = movieDetails.image_url;
         document.getElementById("modal-link").href = movieDetails.url;
 
@@ -38,6 +45,9 @@ async function fetchMovieData() {
         // Gestion des erreurs
         document.getElementById("movie-title").textContent = "Error loading movie";
         document.getElementById("movie-description").textContent = "Unable to fetch data.";
+        // Gestion des erreurs modale
+        document.getElementById("modal-title").textContent = "Error loading movie";
+        document.getElementById("modal-description").textContent = "Unable to fetch data.";
     }
 }
 

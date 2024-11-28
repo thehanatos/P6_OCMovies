@@ -35,24 +35,40 @@
         </div>
 
         <!-- Modale Bootstrap -->
-        <div class="modal fade" id="movieModal" tabindex="-1" aria-labelledby="movieModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 id="modal-title" class="modal-title">Movie Title</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
+<div class="modal fade" id="movieModal" tabindex="-1" aria-labelledby="movieModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modal-title" class="modal-title fw-bold">Movie Title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8 order-md-1" style="margin-bottom: 1rem;">
+                        <p>
+                            <strong id="modal-year">Year</strong> - <strong><span id="modal-genre">Genre</span></strong> <br>
+                            <strong>PEGI: </strong><strong id="modal-pegi">PG</strong> | <strong id="modal-duration">120 min</strong>
+                            <strong>IMDB score: </strong><strong id="modal-imdb">9.5</strong><strong> /10</strong>
+                        </p>
+                        <p><strong>Réalisé par: </strong><br> <span id="modal-director">Director Name</span></p>
                         <p id="modal-description">Movie Description</p>
-                        <img id="modal-image" src="#" class="img-fluid" alt="Movie Image">
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a id="modal-link" href="#" class="btn btn-primary">View More</a>
+
+                    <div class="col-md-4 order-2 order-md-2">
+                        <img id="modal-image" src="#" class="img-fluid rounded image-small-resolution" alt="Movie Image">
+                    </div>
+                    <div class="col-12 order-3" style="margin-top: 1rem;">
+                        <p><strong>Avec:<br></strong> <span id="modal-actors">Actor Names</span></p>
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a id="modal-link" href="#" class="btn btn-primary">View More</a>
+            </div>
         </div>
+    </div>
+</div>
 
         <h2>Films les mieux notés</h2>
         <div class="row row-cols-1 row-cols-md-3">

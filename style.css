@@ -46,3 +46,16 @@ body {
     border-radius: 5px;
     /* arrondi des coins */
 }
+
+@media (max-width: 768px) {
+
+    /* Sur petites résolutions, l'image occupe toute la largeur */
+    .image-small-resolution {
+        width: 100%;
+        /* Largeur égale à celle des informations */
+    }
+        .modal-dialog {
+            margin-left: 20% !important;
+            margin-right: 20% !important;
+        }
+}
