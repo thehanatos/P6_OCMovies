@@ -14,6 +14,7 @@ h1 {
     height: 115px;
     width: auto;
     padding-left: 90px;
+    opacity:0.70;
 }
 .block-solid {
     display: grid;
@@ -22,11 +23,6 @@ h1 {
     justify-content:space-between;
     width: auto;
     height: 125px;
-}
-#text-logo{
-    font-size: 1.5rem; /* Taille de texte relative */
-    word-wrap: break-word; /* Permet au texte de s'adapter */
-    color: #FFFFFF;
 }
 .movie-block {
     border-style: solid;
