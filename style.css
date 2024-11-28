@@ -20,13 +20,11 @@ h1 {
     grid-template-columns: auto 1fr; /* Deux colonnes : image et texte */
     align-items: center;
     justify-content:space-between;
-    border-style: solid;
     width: auto;
-    background-color: #61787F;
     height: 125px;
 }
 #text-logo{
-    font-size: 2rem; /* Taille de texte relative */
+    font-size: 1.5rem; /* Taille de texte relative */
     word-wrap: break-word; /* Permet au texte de s'adapter */
     color: #FFFFFF;
 }
