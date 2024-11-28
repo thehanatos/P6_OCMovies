@@ -25,11 +25,35 @@
                     <div class="card-body">
                         <h5 id="movie-title" class="card-title">Loading...</h5>
                         <p id="movie-description" class="card-text">Please wait, fetching movie details.</p>
-                        <a href="#" id="movie-details-link" class="btn btn-primary bg-gradient">Détails</a>
+                        <!-- Bouton pour ouvrir la modale -->
+                        <button type="button" class="btn btn-primary bg-gradient" data-bs-toggle="modal" data-bs-target="#movieModal">
+                            Détails
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Modale Bootstrap -->
+        <div class="modal fade" id="movieModal" tabindex="-1" aria-labelledby="movieModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 id="modal-title" class="modal-title">Movie Title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modal-description">Movie Description</p>
+                        <img id="modal-image" src="#" class="img-fluid" alt="Movie Image">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a id="modal-link" href="#" class="btn btn-primary">View More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h2>Films les mieux notés</h2>
         <div class="row row-cols-1 row-cols-md-3">
             <div class="col pb-4" style="max-width: 350px;">
