@@ -79,12 +79,25 @@ async function fetchMovieData() {
 
         // *** Mise à jour des films les mieux notés (2e requête) ***
         const combinedSecondQueryResults = [...secondData.results, ...secondPageData.results];
-        const topMoviesSecondQuery = combinedSecondQueryResults.slice(0, 6);
+        const topMoviesSecondQuery = combinedSecondQueryResults.slice(0, 6); // Limiter à 6 éléments
         const topRatedMoviesContainer = document.getElementById("top-rated-movies");
         topRatedMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
-        topMoviesSecondQuery.forEach(movie => {
+
+        // Création des 2 lignes de 3 images
+        topMoviesSecondQuery.forEach((movie, index) => {
+            // Créer la structure pour une ligne avec 3 cartes
+            if (index % 3 === 0 && index !== 0) {
+                topRatedMoviesContainer.innerHTML += `</div>`; // Fermer la ligne précédente
+            }
+
+            // Si c'est le premier élément ou un multiple de 3, commencer une nouvelle ligne
+            if (index % 3 === 0) {
+                topRatedMoviesContainer.innerHTML += `<div class="row">`;
+            }
+
+            // Ajouter chaque carte
             topRatedMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-4 pb-4">
+                <div class="col-12 col-md-6 col-lg-3 pb-4">
                     <div class="card">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
@@ -93,6 +106,11 @@ async function fetchMovieData() {
                     </div>
                 </div>
             `;
+
+            // Si c'est le dernier élément (index === 5), fermer la ligne
+            if (index === topMoviesSecondQuery.length - 1) {
+                topRatedMoviesContainer.innerHTML += `</div>`; // Fermer la dernière ligne
+            }
         });
 
         // *** Mise à jour des films Sci-Fi (3e requête) ***
@@ -100,9 +118,22 @@ async function fetchMovieData() {
         const topMoviesSciFi = combinedThirdQueryResults.slice(0, 6);
         const sciFiMoviesContainer = document.getElementById("sci-fi-movies");
         sciFiMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
-        topMoviesSciFi.forEach(movie => {
+
+        // Création des 2 lignes de 3 images
+        topMoviesSciFi.forEach((movie, index) => {
+            // Créer la structure pour une ligne avec 3 cartes
+            if (index % 3 === 0 && index !== 0) {
+                sciFiMoviesContainer.innerHTML += `</div>`; // Fermer la ligne précédente
+            }
+
+            // Si c'est le premier élément ou un multiple de 3, commencer une nouvelle ligne
+            if (index % 3 === 0) {
+                sciFiMoviesContainer.innerHTML += `<div class="row">`;
+            }
+
+            // Ajouter chaque carte
             sciFiMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-4 pb-4">
+                <div class="col-12 col-md-6 col-lg-3 pb-4">
                     <div class="card">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
@@ -111,6 +142,11 @@ async function fetchMovieData() {
                     </div>
                 </div>
             `;
+
+            // Si c'est le dernier élément (index === 5), fermer la ligne
+            if (index === topMoviesSciFi.length - 1) {
+                sciFiMoviesContainer.innerHTML += `</div>`; // Fermer la dernière ligne
+            }
         });
 
         // *** Mise à jour des films History (4e requête) ***
@@ -118,9 +154,22 @@ async function fetchMovieData() {
         const topMoviesHistory = combinedFourthQueryResults.slice(0, 6);
         const historyMoviesContainer = document.getElementById("history-movies");
         historyMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
-        topMoviesHistory.forEach(movie => {
+
+         // Création des 2 lignes de 3 images
+        topMoviesHistory.forEach((movie, index) => {
+            // Créer la structure pour une ligne avec 3 cartes
+            if (index % 3 === 0 && index !== 0) {
+                historyMoviesContainer.innerHTML += `</div>`; // Fermer la ligne précédente
+            }
+
+            // Si c'est le premier élément ou un multiple de 3, commencer une nouvelle ligne
+            if (index % 3 === 0) {
+                historyMoviesContainer.innerHTML += `<div class="row">`;
+            }
+
+            // Ajouter chaque carte
             historyMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-4 pb-4">
+                <div class="col-12 col-md-6 col-lg-3 pb-4">
                     <div class="card">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
@@ -129,6 +178,10 @@ async function fetchMovieData() {
                     </div>
                 </div>
             `;
+            // Si c'est le dernier élément (index === 5), fermer la ligne
+            if (index === topMoviesHistory.length - 1) {
+                historyMoviesContainer.innerHTML += `</div>`; // Fermer la dernière ligne
+            }
         });
 
     } catch (error) {
