@@ -1,13 +1,17 @@
 h1 {
     color: black;
 }
+h2 {
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+}
 
 .pb-gutter {
     padding-bottom: calc(var(--bs-gutter-y) * 0.5);
 }
 
-.ma-classe {
-    color: #663399;
+.best-movie {
+    max-width: 600px !important;
 }
 #logo {
     margin-right: 100px;
@@ -31,7 +35,7 @@ h1 {
     width: auto;
 }
 body {
-    margin: 50px 100px;
+    margin: 9% !important;
 }
 .image-placeholder{
     border-radius: 10px;
