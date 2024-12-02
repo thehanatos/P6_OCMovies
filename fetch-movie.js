@@ -1,3 +1,103 @@
+// Fonction pour récupérer les genres depuis l'API
+async function fetchGenres() {
+    try {
+        const genreUrls = [
+            "http://localhost:8000/api/v1/genres/",
+            "http://localhost:8000/api/v1/genres/?page=2",
+            "http://localhost:8000/api/v1/genres/?page=3",
+            "http://localhost:8000/api/v1/genres/?page=4",
+            "http://localhost:8000/api/v1/genres/?page=5"
+        ];
+
+        // Récupération des genres sur plusieurs pages
+        const genreResponses = await Promise.all(genreUrls.map((url) => fetch(url)));
+        const genreData = await Promise.all(genreResponses.map((res) => res.json()));
+
+        // Fusionner les résultats
+        const allGenres = genreData.flatMap((data) => data.results);
+
+        return allGenres.map((genre) => genre.name); // Retourner une liste des noms des genres
+    } catch (error) {
+        console.error("Erreur lors de la récupération des genres :", error);
+        return [];
+    }
+}
+
+// Fonction pour récupérer les films par genre
+async function fetchMoviesByGenre(genre) {
+    try {
+        // Requête pour récupérer les films selon le genre
+        const firstPageUrl = `http://localhost:8000/api/v1/titles/?&genre=${genre}&imdb_score_min=8`;
+        const secondPageUrl = `http://localhost:8000/api/v1/titles/?&genre=${genre}&imdb_score_min=8&page=2`;
+
+        const [firstPageResponse, secondPageResponse] = await Promise.all([
+            fetch(firstPageUrl),
+            fetch(secondPageUrl)
+        ]);
+
+        if (!firstPageResponse.ok || !secondPageResponse.ok) {
+            throw new Error("Erreur lors de la récupération des films.");
+        }
+
+        const firstPageData = await firstPageResponse.json();
+        const secondPageData = await secondPageResponse.json();
+
+        // Fusionner les résultats des deux pages
+        const movies = [...firstPageData.results, ...secondPageData.results].slice(0, 6);
+
+        return movies;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des films par genre :", error);
+        return [];
+    }
+}
+
+// Fonction pour afficher les films du genre sélectionné
+async function updateMoviesByGenre(genre) {
+    const genreMoviesContainer = document.getElementById("genre-movies");
+    genreMoviesContainer.innerHTML = ""; // Nettoyer le conteneur
+
+    const movies = await fetchMoviesByGenre(genre);
+
+    // Afficher les films avec gestion des résolutions
+    movies.forEach((movie) => {
+        genreMoviesContainer.innerHTML += `
+            <div class="col-12 col-md-6 col-lg-4"> <!-- Responsive classes -->
+                <div class="card">
+                    <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">${movie.title}</h5>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Fonction pour peupler le menu déroulant des genres
+async function setupGenreDropdown() {
+    const genres = await fetchGenres();
+    const dropdownMenu = document.querySelector(".dropdown-menu");
+
+    // Ajouter les genres à la liste déroulante
+    genres.forEach((genre) => {
+        const listItem = document.createElement("li");
+        const button = document.createElement("button");
+        button.textContent = genre;
+        button.className = "dropdown-item";
+        button.type = "button";
+
+        // Ajouter un événement de clic
+        button.addEventListener("click", () => {
+            updateMoviesByGenre(genre); // Mettre à jour les films selon le genre
+        });
+
+        listItem.appendChild(button);
+        dropdownMenu.appendChild(listItem);
+    });
+}
+
+// Fonction principale pour récupérer les films
 async function fetchMovieData() {
     const firstApiUrl = "http://localhost:8000/api/v1/titles/?&imdb_score_min=9.5";
     const secondApiUrl = "http://localhost:8000/api/v1/titles/?&imdb_score_min=9.4";
@@ -119,28 +219,47 @@ async function fetchMovieData() {
 
         // *** Mise à jour des films History (4e requête) ***
         const combinedFourthQueryResults = [...fourthData.results, ...fourthPageData.results];
-const topMoviesHistory = combinedFourthQueryResults.slice(0, 6);
-const historyMoviesContainer = document.getElementById("history-movies");
-historyMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
+        const topMoviesHistory = combinedFourthQueryResults.slice(0, 6);
+        const historyMoviesContainer = document.getElementById("history-movies");
+        historyMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
 
-// Ajout des films History avec gestion des résolutions spécifiques
-topMoviesHistory.forEach((movie) => {
-    historyMoviesContainer.innerHTML += `
-        <div class="col-12 col-md-6 col-lg-4"> <!-- Responsive classes -->
-            <div class="card">
-                <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">${movie.title}</h5>
+        // Ajout des films History avec gestion des résolutions spécifiques
+        topMoviesHistory.forEach((movie) => {
+            historyMoviesContainer.innerHTML += `
+                <div class="col-12 col-md-6 col-lg-4"> <!-- Responsive classes -->
+                    <div class="card">
+                        <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">${movie.title}</h5>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    `;
-});
+            `;
+        });
 
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
     }
 }
 
-// Appeler la fonction au chargement de la page
+// Fonction pour afficher une liste de films
+function updateMoviesList(movies, limit) {
+    const container = document.getElementById("movies-list");
+    container.innerHTML = ""; // Nettoyer le conteneur
+    movies.slice(0, limit).forEach((movie) => {
+        container.innerHTML += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card">
+                    <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">${movie.title}</h5>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Appeler les fonctions principales au chargement de la page
+setupGenreDropdown();
 fetchMovieData();
