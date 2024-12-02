@@ -83,21 +83,10 @@ async function fetchMovieData() {
         const topRatedMoviesContainer = document.getElementById("top-rated-movies");
         topRatedMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
 
-        // Création des 2 lignes de 3 images
-        topMoviesSecondQuery.forEach((movie, index) => {
-            // Créer la structure pour une ligne avec 3 cartes
-            if (index % 3 === 0 && index !== 0) {
-                topRatedMoviesContainer.innerHTML += `</div>`; // Fermer la ligne précédente
-            }
-
-            // Si c'est le premier élément ou un multiple de 3, commencer une nouvelle ligne
-            if (index % 3 === 0) {
-                topRatedMoviesContainer.innerHTML += `<div class="row">`;
-            }
-
-            // Ajouter chaque carte
+        // Ajout des films selon les résolutions spécifiques
+        topMoviesSecondQuery.forEach((movie) => {
             topRatedMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-3 pb-4">
+                <div class="col-12 col-md-6 col-lg-4"> <!-- Responsive classes -->
                     <div class="card">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
@@ -106,11 +95,6 @@ async function fetchMovieData() {
                     </div>
                 </div>
             `;
-
-            // Si c'est le dernier élément (index === 5), fermer la ligne
-            if (index === topMoviesSecondQuery.length - 1) {
-                topRatedMoviesContainer.innerHTML += `</div>`; // Fermer la dernière ligne
-            }
         });
 
         // *** Mise à jour des films Sci-Fi (3e requête) ***
@@ -119,21 +103,10 @@ async function fetchMovieData() {
         const sciFiMoviesContainer = document.getElementById("sci-fi-movies");
         sciFiMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
 
-        // Création des 2 lignes de 3 images
-        topMoviesSciFi.forEach((movie, index) => {
-            // Créer la structure pour une ligne avec 3 cartes
-            if (index % 3 === 0 && index !== 0) {
-                sciFiMoviesContainer.innerHTML += `</div>`; // Fermer la ligne précédente
-            }
-
-            // Si c'est le premier élément ou un multiple de 3, commencer une nouvelle ligne
-            if (index % 3 === 0) {
-                sciFiMoviesContainer.innerHTML += `<div class="row">`;
-            }
-
-            // Ajouter chaque carte
+        // Ajout des films Sci-Fi avec gestion des résolutions spécifiques
+        topMoviesSciFi.forEach((movie) => {
             sciFiMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-3 pb-4">
+                <div class="col-12 col-md-6 col-lg-4"> <!-- Responsive classes -->
                     <div class="card">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
@@ -142,47 +115,27 @@ async function fetchMovieData() {
                     </div>
                 </div>
             `;
-
-            // Si c'est le dernier élément (index === 5), fermer la ligne
-            if (index === topMoviesSciFi.length - 1) {
-                sciFiMoviesContainer.innerHTML += `</div>`; // Fermer la dernière ligne
-            }
         });
 
         // *** Mise à jour des films History (4e requête) ***
         const combinedFourthQueryResults = [...fourthData.results, ...fourthPageData.results];
-        const topMoviesHistory = combinedFourthQueryResults.slice(0, 6);
-        const historyMoviesContainer = document.getElementById("history-movies");
-        historyMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
+const topMoviesHistory = combinedFourthQueryResults.slice(0, 6);
+const historyMoviesContainer = document.getElementById("history-movies");
+historyMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
 
-         // Création des 2 lignes de 3 images
-        topMoviesHistory.forEach((movie, index) => {
-            // Créer la structure pour une ligne avec 3 cartes
-            if (index % 3 === 0 && index !== 0) {
-                historyMoviesContainer.innerHTML += `</div>`; // Fermer la ligne précédente
-            }
-
-            // Si c'est le premier élément ou un multiple de 3, commencer une nouvelle ligne
-            if (index % 3 === 0) {
-                historyMoviesContainer.innerHTML += `<div class="row">`;
-            }
-
-            // Ajouter chaque carte
-            historyMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-3 pb-4">
-                    <div class="card">
-                        <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">${movie.title}</h5>
-                        </div>
-                    </div>
+// Ajout des films History avec gestion des résolutions spécifiques
+topMoviesHistory.forEach((movie) => {
+    historyMoviesContainer.innerHTML += `
+        <div class="col-12 col-md-6 col-lg-4"> <!-- Responsive classes -->
+            <div class="card">
+                <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">${movie.title}</h5>
                 </div>
-            `;
-            // Si c'est le dernier élément (index === 5), fermer la ligne
-            if (index === topMoviesHistory.length - 1) {
-                historyMoviesContainer.innerHTML += `</div>`; // Fermer la dernière ligne
-            }
-        });
+            </div>
+        </div>
+    `;
+});
 
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
