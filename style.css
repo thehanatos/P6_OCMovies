@@ -22,7 +22,7 @@ h2 {
 }
 .block-solid {
     display: grid;
-    grid-template-columns: auto 1fr; /* Deux colonnes : image et texte */
+    grid-template-columns: auto 1fr;
     align-items: center;
     justify-content:space-between;
     width: auto;
@@ -42,21 +42,15 @@ body {
 }
 ::placeholder {
     border: 1px solid #ccc;
-    /* largeur et couleur de la bordure */
     padding: 5px;
-    /* marge intérieure */
     background-color: #f7f7f7;
-    /* couleur de l'arrière-plan */
     border-radius: 5px;
-    /* arrondi des coins */
 }
 
 @media (max-width: 768px) {
 
-    /* Sur petites résolutions, l'image occupe toute la largeur */
     .image-small-resolution {
         width: 100%;
-        /* Largeur égale à celle des informations */
     }
         .modal-dialog {
             margin-left: 20% !important;
@@ -67,5 +61,5 @@ body {
 .card-img-top {
     object-fit: cover;
     width: 100%;
-    height: 200px; /* Hauteur fixe ou ajustable selon l'écran */
+    height: 200px;
 }
