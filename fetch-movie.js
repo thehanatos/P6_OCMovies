@@ -97,6 +97,38 @@ async function setupGenreDropdown() {
     });
 }
 
+// Fonction pour gérer l'affichage de la modale avec les détails du film
+function displayMovieInModal(movie) {
+    // Mise à jour des informations de la modale
+    document.getElementById("modal-title").textContent = movie.title;
+    document.getElementById("modal-year").textContent = movie.year || "N/A";
+    document.getElementById("modal-genre").textContent = movie.genres ? movie.genres.join(", ") : "N/A";
+    document.getElementById("modal-pegi").textContent = movie.rated || "N/A";
+    document.getElementById("modal-duration").textContent = movie.duration ? `${movie.duration} min` : "N/A";
+    document.getElementById("modal-imdb").textContent = movie.imdb_score || "N/A";
+    document.getElementById("modal-director").textContent = movie.directors ? movie.directors.join(", ") : "N/A";
+    document.getElementById("modal-description").textContent = movie.description || "No description available.";
+    document.getElementById("modal-actors").textContent = movie.actors ? movie.actors.join(", ") : "N/A";
+    document.getElementById("modal-image").src = movie.image_url || "https://via.placeholder.com/150";
+    document.getElementById("modal-link").href = movie.url || "#";
+
+    // Afficher la modale
+    const modal = new bootstrap.Modal(document.getElementById("movieModal"));
+    modal.show();
+}
+
+// Fonction pour ajouter un événement de clic aux cartes de films
+function addCardClickEvent(containerId, movies) {
+    const container = document.getElementById(containerId);
+
+    container.querySelectorAll(".card").forEach((card, index) => {
+        card.addEventListener("click", () => {
+            // Afficher les détails du film correspondant
+            displayMovieInModal(movies[index]);
+        });
+    });
+}
+
 // Fonction principale pour récupérer les films
 async function fetchMovieData() {
     const firstApiUrl = "http://localhost:8000/api/v1/titles/?&imdb_score_min=9.5";
@@ -186,8 +218,8 @@ async function fetchMovieData() {
         // Ajout des films selon les résolutions spécifiques
         topMoviesSecondQuery.forEach((movie) => {
             topRatedMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-4"> <!-- Responsive classes -->
-                    <div class="card">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card" style="cursor: pointer;">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">${movie.title}</h5>
@@ -196,6 +228,9 @@ async function fetchMovieData() {
                 </div>
             `;
         });
+
+        // Ajouter l'événement de clic
+        addCardClickEvent("top-rated-movies", topMoviesSecondQuery);
 
         // *** Mise à jour des films Sci-Fi (3e requête) ***
         const combinedThirdQueryResults = [...thirdData.results, ...thirdPageData.results];
@@ -206,8 +241,8 @@ async function fetchMovieData() {
         // Ajout des films Sci-Fi avec gestion des résolutions spécifiques
         topMoviesSciFi.forEach((movie) => {
             sciFiMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-4"> <!-- Responsive classes -->
-                    <div class="card">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card" style="cursor: pointer;">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">${movie.title}</h5>
@@ -216,6 +251,9 @@ async function fetchMovieData() {
                 </div>
             `;
         });
+
+        // Ajouter l'événement de clic
+        addCardClickEvent("sci-fi-movies", topMoviesSciFi);
 
         // *** Mise à jour des films History (4e requête) ***
         const combinedFourthQueryResults = [...fourthData.results, ...fourthPageData.results];
@@ -226,8 +264,8 @@ async function fetchMovieData() {
         // Ajout des films History avec gestion des résolutions spécifiques
         topMoviesHistory.forEach((movie) => {
             historyMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-4"> <!-- Responsive classes -->
-                    <div class="card">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card" style="cursor: pointer;">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">${movie.title}</h5>
@@ -236,6 +274,9 @@ async function fetchMovieData() {
                 </div>
             `;
         });
+
+        // Ajouter l'événement de clic
+        addCardClickEvent("history-movies", topMoviesHistory);
 
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
