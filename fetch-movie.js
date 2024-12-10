@@ -299,12 +299,23 @@ async function fetchMovieData() {
 }
 
 // Fonction pour afficher une liste de films
-function updateMoviesList(movies, limit) {
-    const container = document.getElementById("movies-list");
-    container.innerHTML = ""; // Nettoyer le conteneur
-    movies.slice(0, limit).forEach((movie) => {
-        container.innerHTML += `
-            <div class="col-12 col-md-6 col-lg-4 movie">
+// Fonction pour afficher les films du genre sélectionné
+async function updateMoviesByGenre(genre) {
+    const genreMoviesContainer = document.getElementById("genre-movies");
+    genreMoviesContainer.innerHTML = ""; // Nettoyer le conteneur
+
+    const movies = await fetchMoviesByGenre(genre);
+
+    // Afficher les films avec gestion des résolutions
+    movies.forEach((movie, index) => {
+        // Appliquer une classe hidden aux films à partir du 3e (sur petite résolution)
+        let hiddenClass = '';
+        if (index >= 2) {
+            hiddenClass = 'hidden'; // Cacher au-delà du 2e film pour la petite résolution
+        }
+        
+        genreMoviesContainer.innerHTML += `
+            <div class="col-12 col-md-6 col-lg-4 movie ${hiddenClass}"> <!-- Responsive classes -->
                 <div class="card">
                     <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                     <div class="card-body">
@@ -314,32 +325,69 @@ function updateMoviesList(movies, limit) {
             </div>
         `;
     });
-}
 
-// Fonction pour gérer l'affichage dynamique des films par catégorie
-function toggleMovies(categoryId, buttonId) {
-    const categoryContainer = document.getElementById(categoryId);
-    const button = document.getElementById(buttonId);
-    const hiddenMovies = categoryContainer.querySelectorAll('.movie.hidden');
-
-    if (hiddenMovies.length > 0) {
-        // Montrer tous les films
-        hiddenMovies.forEach(movie => movie.classList.remove('hidden'));
-        button.textContent = "Voir moins";
-    } else {
-        // Réduire à l'affichage par défaut (2 films pour petite résolution, 4 films pour moyenne résolution)
-        const movies = categoryContainer.querySelectorAll('.movie');
-        movies.forEach((movie, index) => {
-            if (index >= 2) movie.classList.add('hidden');
-        });
-        button.textContent = "Voir plus";
+    // Initialiser ou mettre à jour le bouton pour afficher plus de films
+    const seeMoreButton = document.getElementById("see-more-genre");
+    if (seeMoreButton) {
+        seeMoreButton.removeEventListener('click', handleSeeMoreGenreClick); // Retirer l'ancien gestionnaire
+        seeMoreButton.addEventListener('click', () => toggleMovies('genre-movies', 'see-more-genre'));
     }
 }
 
+// Fonction pour gérer l'affichage dynamique des films
+function toggleMovies(categoryId, buttonId) {
+    const categoryContainer = document.getElementById(categoryId);
+    const button = document.getElementById(buttonId);
+    const allMovies = categoryContainer.querySelectorAll('.movie');
+
+    // Vérifier si tous les films sont visibles ou non
+    const hiddenMovies = categoryContainer.querySelectorAll('.movie.hidden');
+
+    if (hiddenMovies.length > 0) {
+        // Montrer les films cachés
+        allMovies.forEach((movie) => movie.classList.remove('hidden'));
+        button.textContent = "Voir moins";  // Mettre à jour le texte du bouton
+    } else {
+        // Cacher certains films en fonction de la largeur de la fenêtre
+        allMovies.forEach((movie, index) => {
+            if (window.innerWidth <= 576 && index >= 2) {
+                movie.classList.add('hidden');
+            } else if (window.innerWidth > 576 && window.innerWidth <= 992 && index >= 4) {
+                movie.classList.add('hidden');
+            } else if (window.innerWidth > 992 && index >= 6) {
+                movie.classList.add('hidden');
+            }
+        });
+        button.textContent = "Voir plus";  // Mettre à jour le texte du bouton
+    }
+}
+
+// Fonction principale pour récupérer et afficher les genres
+async function fetchAndDisplayGenres() {
+    const genres = await fetchGenres();
+    const dropdownMenu = document.querySelector(".dropdown-menu");
+
+    // Ajouter les genres à la liste déroulante
+    genres.forEach((genre) => {
+        const listItem = document.createElement("li");
+        const button = document.createElement("button");
+        button.textContent = genre;
+        button.className = "dropdown-item";
+        button.type = "button";
+
+        // Ajouter un événement de clic
+        button.addEventListener("click", () => {
+            updateMoviesByGenre(genre); // Mettre à jour les films selon le genre
+        });
+
+        listItem.appendChild(button);
+        dropdownMenu.appendChild(listItem);
+    });
+}
 
 // Fonction d'initialisation de l'affichage par catégorie
 function initializeMovieDisplay() {
-    const categories = ['top-rated-movies', 'sci-fi-movies', 'history-movies'];
+    const categories = ['top-rated-movies', 'sci-fi-movies', 'history-movies', 'genre-movies'];
     categories.forEach(categoryId => {
         const categoryContainer = document.getElementById(categoryId);
         const movies = categoryContainer.querySelectorAll('.movie');
@@ -358,8 +406,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('see-more-sci-fi').addEventListener('click', () => toggleMovies('sci-fi-movies', 'see-more-sci-fi'));
     document.getElementById('see-more-history').addEventListener('click', () => toggleMovies('history-movies', 'see-more-history'));
     document.getElementById('see-more-genre').addEventListener('click', () => toggleMovies('genre-movies', 'see-more-genre'));
-});
 
-// Appeler les fonctions principales au chargement de la page
-setupGenreDropdown();
-fetchMovieData();
+    // Initialisation de l'affichage des films
+    fetchAndDisplayGenres(); // Appel à la fonction pour récupérer les genres et afficher les films
+    fetchMovieData();  // Appel à la fonction pour récupérer et afficher les films
+});
