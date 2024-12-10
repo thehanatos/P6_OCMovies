@@ -25,7 +25,6 @@
                     <div class="card-body">
                         <h5 id="movie-title" class="card-title">Loading...</h5>
                         <p id="movie-description" class="card-text">Please wait, fetching movie details.</p>
-                        <!-- Bouton pour ouvrir la modale -->
                         <button type="button" class="btn btn-primary bg-gradient" data-bs-toggle="modal" data-bs-target="#movieModal">
                             Détails
                         </button>
@@ -33,8 +32,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Modale Bootstrap -->
+        
 <div class="modal fade" id="movieModal" tabindex="-1" aria-labelledby="movieModalLabel" aria-hidden="true">
     <div class="modal-dialog custom-modal-dialog modal-lg">
         <div class="modal-content">
@@ -72,16 +70,15 @@
 
         <h2>Films les mieux notés</h2>
         <div id="top-rated-movies" class="row g-4"></div>
-        <button id="see-more-top-rated" class="btn btn-primary d-none d-md-block d-lg-none">Voir plus</button>
+        <button id="see-more-top-rated" class="btn btn-primary btn-voir-plus">Voir plus</button>
 
         <h2>Sci-Fi</h2>
         <div id="sci-fi-movies" class="row g-4"></div>
-        <button id="see-more-sci-fi" class="btn btn-primary d-none d-md-block d-lg-none">Voir plus</button>
+        <button id="see-more-sci-fi" class="btn btn-primary btn-voir-plus">Voir plus</button>
         
         <h2>History</h2>
         <div id="history-movies" class="row g-4"></div>
-        <button id="see-more-history" class="btn btn-primary d-none d-md-block d-lg-none">Voir plus</button>
-
+        <div><button id="see-more-history" class="btn btn-primary btn-voir-plus">Voir plus</button></div>
         <!-- besoin de margin comme h2 ? -->
         <div class="btn-group"> 
             <button class="btn btn-primary bg-gradient btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -92,6 +89,7 @@
         </div>
         <h2>Films par Genre</h2>
         <div id="genre-movies" class="row g-4"></div>
+        <button id="see-more-genre" class="btn btn-primary btn-voir-plus">Voir plus</button>
         
 
     <!-- Bootsrap JS -->
