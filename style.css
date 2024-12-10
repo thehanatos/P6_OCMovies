@@ -63,3 +63,41 @@ body {
     width: 100%;
     height: 200px;
 }
+
+/* Par défaut, on limite l'affichage à deux films */
+.movie.hidden {
+    display: none !important;
+}
+
+/* Résolution moyenne : afficher jusqu'à 4 films */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .movie:nth-child(-n+4) {
+        display: block !important;
+    }
+}
+
+/* Grande résolution : afficher tous les films */
+@media (min-width: 1025px) {
+    .movie {
+        display: block !important;
+    }
+
+    .movie.hidden {
+        display: block !important;
+    }
+}
+
+.btn-voir-plus {
+    display: inline-block;
+}
+
+.btn {
+    margin-top: 1rem !important;
+}
+
+/* Cacher le bouton sur les écrans de grande taille (résolution > 1025px) */
+@media (min-width: 1025px) {
+    .btn-voir-plus {
+        display: none !important;
+    }
+}
