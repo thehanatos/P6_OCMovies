@@ -60,9 +60,15 @@ async function updateMoviesByGenre(genre) {
     const movies = await fetchMoviesByGenre(genre);
 
     // Afficher les films avec gestion des résolutions
-    movies.forEach((movie) => {
+    movies.forEach((movie, index) => {
+        // Appliquer une classe hidden aux films à partir du 3e (sur petite résolution)
+        let hiddenClass = '';
+        if (index >= 2) {
+            hiddenClass = 'hidden'; // Cacher au-delà du 2e film pour la petite résolution
+        }
+        
         genreMoviesContainer.innerHTML += `
-            <div class="col-12 col-md-6 col-lg-4 movie"> <!-- Responsive classes -->
+            <div class="col-12 col-md-6 col-lg-4 movie ${hiddenClass}"> <!-- Responsive classes -->
                 <div class="card">
                     <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                     <div class="card-body">
@@ -72,7 +78,14 @@ async function updateMoviesByGenre(genre) {
             </div>
         `;
     });
+
+    // Initialiser le bouton pour afficher plus de films
+    const seeMoreButton = document.getElementById("see-more-genre");
+    if (seeMoreButton) {
+        seeMoreButton.addEventListener('click', () => toggleMovies('genre-movies', 'see-more-genre'));
+    }
 }
+
 
 // Fonction pour peupler le menu déroulant des genres
 async function setupGenreDropdown() {
@@ -314,7 +327,7 @@ function toggleMovies(categoryId, buttonId) {
         hiddenMovies.forEach(movie => movie.classList.remove('hidden'));
         button.textContent = "Voir moins";
     } else {
-        // Réduire à l'affichage par défaut
+        // Réduire à l'affichage par défaut (2 films pour petite résolution, 4 films pour moyenne résolution)
         const movies = categoryContainer.querySelectorAll('.movie');
         movies.forEach((movie, index) => {
             if (index >= 2) movie.classList.add('hidden');
@@ -322,6 +335,7 @@ function toggleMovies(categoryId, buttonId) {
         button.textContent = "Voir plus";
     }
 }
+
 
 // Fonction d'initialisation de l'affichage par catégorie
 function initializeMovieDisplay() {
