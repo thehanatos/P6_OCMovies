@@ -62,7 +62,7 @@ async function updateMoviesByGenre(genre) {
     // Afficher les films avec gestion des résolutions
     movies.forEach((movie) => {
         genreMoviesContainer.innerHTML += `
-            <div class="col-12 col-md-6 col-lg-4"> <!-- Responsive classes -->
+            <div class="col-12 col-md-6 col-lg-4 movie"> <!-- Responsive classes -->
                 <div class="card">
                     <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                     <div class="card-body">
@@ -218,7 +218,7 @@ async function fetchMovieData() {
         // Ajout des films selon les résolutions spécifiques
         topMoviesSecondQuery.forEach((movie) => {
             topRatedMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-4">
+                <div class="col-12 col-md-6 col-lg-4 movie">
                     <div class="card" style="cursor: pointer;">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
@@ -241,7 +241,7 @@ async function fetchMovieData() {
         // Ajout des films Sci-Fi avec gestion des résolutions spécifiques
         topMoviesSciFi.forEach((movie) => {
             sciFiMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-4">
+                <div class="col-12 col-md-6 col-lg-4 movie">
                     <div class="card" style="cursor: pointer;">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
@@ -264,7 +264,7 @@ async function fetchMovieData() {
         // Ajout des films History avec gestion des résolutions spécifiques
         topMoviesHistory.forEach((movie) => {
             historyMoviesContainer.innerHTML += `
-                <div class="col-12 col-md-6 col-lg-4">
+                <div class="col-12 col-md-6 col-lg-4 movie">
                     <div class="card" style="cursor: pointer;">
                         <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
@@ -278,6 +278,8 @@ async function fetchMovieData() {
         // Ajouter l'événement de clic
         addCardClickEvent("history-movies", topMoviesHistory);
 
+        initializeMovieDisplay();
+
     } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
     }
@@ -289,7 +291,7 @@ function updateMoviesList(movies, limit) {
     container.innerHTML = ""; // Nettoyer le conteneur
     movies.slice(0, limit).forEach((movie) => {
         container.innerHTML += `
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-md-6 col-lg-4 movie">
                 <div class="card">
                     <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                     <div class="card-body">
@@ -300,6 +302,49 @@ function updateMoviesList(movies, limit) {
         `;
     });
 }
+
+// Fonction pour gérer l'affichage dynamique des films par catégorie
+function toggleMovies(categoryId, buttonId) {
+    const categoryContainer = document.getElementById(categoryId);
+    const button = document.getElementById(buttonId);
+    const hiddenMovies = categoryContainer.querySelectorAll('.movie.hidden');
+
+    if (hiddenMovies.length > 0) {
+        // Montrer tous les films
+        hiddenMovies.forEach(movie => movie.classList.remove('hidden'));
+        button.textContent = "Voir moins";
+    } else {
+        // Réduire à l'affichage par défaut
+        const movies = categoryContainer.querySelectorAll('.movie');
+        movies.forEach((movie, index) => {
+            if (index >= 2) movie.classList.add('hidden');
+        });
+        button.textContent = "Voir plus";
+    }
+}
+
+// Fonction d'initialisation de l'affichage par catégorie
+function initializeMovieDisplay() {
+    const categories = ['top-rated-movies', 'sci-fi-movies', 'history-movies'];
+    categories.forEach(categoryId => {
+        const categoryContainer = document.getElementById(categoryId);
+        const movies = categoryContainer.querySelectorAll('.movie');
+
+        // Appliquer la classe `hidden` à tous les films sauf les 2 premiers (petite résolution)
+        movies.forEach((movie, index) => {
+            if (index >= 2) movie.classList.add('hidden');
+        });
+    });
+}
+
+// Appeler l'initialisation au chargement de la page
+document.addEventListener('DOMContentLoaded', () => {
+    // Ajouter les événements aux boutons
+    document.getElementById('see-more-top-rated').addEventListener('click', () => toggleMovies('top-rated-movies', 'see-more-top-rated'));
+    document.getElementById('see-more-sci-fi').addEventListener('click', () => toggleMovies('sci-fi-movies', 'see-more-sci-fi'));
+    document.getElementById('see-more-history').addEventListener('click', () => toggleMovies('history-movies', 'see-more-history'));
+    document.getElementById('see-more-genre').addEventListener('click', () => toggleMovies('genre-movies', 'see-more-genre'));
+});
 
 // Appeler les fonctions principales au chargement de la page
 setupGenreDropdown();
