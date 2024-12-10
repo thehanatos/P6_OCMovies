@@ -59,17 +59,16 @@ async function updateMoviesByGenre(genre) {
 
     const movies = await fetchMoviesByGenre(genre);
 
-    // Afficher les films avec gestion des résolutions
+     // Afficher les films avec gestion des résolutions
     movies.forEach((movie, index) => {
         // Appliquer une classe hidden aux films à partir du 3e (sur petite résolution)
         let hiddenClass = '';
         if (index >= 2) {
             hiddenClass = 'hidden'; // Cacher au-delà du 2e film pour la petite résolution
         }
-        
         genreMoviesContainer.innerHTML += `
-            <div class="col-12 col-md-6 col-lg-4 movie ${hiddenClass}"> <!-- Responsive classes -->
-                <div class="card">
+            <div class="col-12 col-md-6 col-lg-4 movie ${hiddenClass}">
+                <div class="card" style="cursor: pointer;">
                     <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
                     <div class="card-body">
                         <h5 class="card-title">${movie.title}</h5>
@@ -79,11 +78,15 @@ async function updateMoviesByGenre(genre) {
         `;
     });
 
+    
     // Initialiser le bouton pour afficher plus de films
     const seeMoreButton = document.getElementById("see-more-genre");
     if (seeMoreButton) {
         seeMoreButton.addEventListener('click', () => toggleMovies('genre-movies', 'see-more-genre'));
     }
+
+    addCardClickEvent("genre-movies", movies); // Associer les événements de clic
+
 }
 
 
@@ -298,42 +301,6 @@ async function fetchMovieData() {
     }
 }
 
-// Fonction pour afficher une liste de films
-// Fonction pour afficher les films du genre sélectionné
-async function updateMoviesByGenre(genre) {
-    const genreMoviesContainer = document.getElementById("genre-movies");
-    genreMoviesContainer.innerHTML = ""; // Nettoyer le conteneur
-
-    const movies = await fetchMoviesByGenre(genre);
-
-    // Afficher les films avec gestion des résolutions
-    movies.forEach((movie, index) => {
-        // Appliquer une classe hidden aux films à partir du 3e (sur petite résolution)
-        let hiddenClass = '';
-        if (index >= 2) {
-            hiddenClass = 'hidden'; // Cacher au-delà du 2e film pour la petite résolution
-        }
-        
-        genreMoviesContainer.innerHTML += `
-            <div class="col-12 col-md-6 col-lg-4 movie ${hiddenClass}"> <!-- Responsive classes -->
-                <div class="card">
-                    <img src="${movie.image_url}" class="card-img-top" alt="${movie.title}" style="height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">${movie.title}</h5>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-
-    // Initialiser ou mettre à jour le bouton pour afficher plus de films
-    const seeMoreButton = document.getElementById("see-more-genre");
-    if (seeMoreButton) {
-        seeMoreButton.removeEventListener('click', handleSeeMoreGenreClick); // Retirer l'ancien gestionnaire
-        seeMoreButton.addEventListener('click', () => toggleMovies('genre-movies', 'see-more-genre'));
-    }
-}
-
 // Fonction pour gérer l'affichage dynamique des films
 function toggleMovies(categoryId, buttonId) {
     const categoryContainer = document.getElementById(categoryId);
@@ -408,6 +375,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('see-more-genre').addEventListener('click', () => toggleMovies('genre-movies', 'see-more-genre'));
 
     // Initialisation de l'affichage des films
-    fetchAndDisplayGenres(); // Appel à la fonction pour récupérer les genres et afficher les films
-    fetchMovieData();  // Appel à la fonction pour récupérer et afficher les films
+    fetchAndDisplayGenres(); 
+    fetchMovieData();  
 });
