@@ -2,11 +2,7 @@
 async function fetchGenres() {
     try {
         const genreUrls = [
-            "http://localhost:8000/api/v1/genres/",
-            "http://localhost:8000/api/v1/genres/?page=2",
-            "http://localhost:8000/api/v1/genres/?page=3",
-            "http://localhost:8000/api/v1/genres/?page=4",
-            "http://localhost:8000/api/v1/genres/?page=5"
+            "http://localhost:8000/api/v1/genres/?page_size=25"
         ];
 
         // Récupération des genres sur plusieurs pages
@@ -27,23 +23,18 @@ async function fetchGenres() {
 async function fetchMoviesByGenre(genre) {
     try {
         // Requête pour récupérer les films selon le genre
-        const firstPageUrl = `http://localhost:8000/api/v1/titles/?&genre=${genre}&imdb_score_min=8`;
-        const secondPageUrl = `http://localhost:8000/api/v1/titles/?&genre=${genre}&imdb_score_min=8&page=2`;
+        const firstPageUrl = `http://localhost:8000/api/v1/titles/?&genre=${genre}&imdb_score_min=8&page_size=25`;
 
-        const [firstPageResponse, secondPageResponse] = await Promise.all([
-            fetch(firstPageUrl),
-            fetch(secondPageUrl)
+        const [firstPageResponse] = await Promise.all([
+            fetch(firstPageUrl)
         ]);
 
-        if (!firstPageResponse.ok || !secondPageResponse.ok) {
+        if (!firstPageResponse.ok) {
             throw new Error("Erreur lors de la récupération des films.");
         }
 
         const firstPageData = await firstPageResponse.json();
-        const secondPageData = await secondPageResponse.json();
-
-        // Fusionner les résultats des deux pages
-        const movies = [...firstPageData.results, ...secondPageData.results].slice(0, 6);
+        const movies = [...firstPageData.results].slice(0, 6);
 
         return movies;
     } catch (error) {
