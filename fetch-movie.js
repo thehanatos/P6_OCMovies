@@ -78,7 +78,7 @@ async function updateMoviesByGenre(genre) {
         `;
     });
 
-    addCardClickEvent("genre-movies", movies); // Associer les événements de clic
+    addCardClickEvent("genre-movies", topMoviesGenre); // Associer les événements de clic
 
 }
 
