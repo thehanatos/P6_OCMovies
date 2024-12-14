@@ -52,15 +52,15 @@ async function fetchMoviesByGenre(genre) {
     }
 }
 
-// Fonction pour afficher les films du genre sélectionné
+//Fonction pour afficher les films du genre sélectionné
 async function updateMoviesByGenre(genre) {
     const genreMoviesContainer = document.getElementById("genre-movies");
     genreMoviesContainer.innerHTML = ""; // Nettoyer le conteneur
 
-    const movies = await fetchMoviesByGenre(genre);
+    const topMoviesGenre = await fetchMoviesByGenre(genre);
 
      // Afficher les films avec gestion des résolutions
-    movies.forEach((movie, index) => {
+    topMoviesGenre.forEach((movie, index) => {
         // Appliquer une classe hidden aux films à partir du 3e (sur petite résolution)
         let hiddenClass = '';
         if (index >= 2) {
@@ -78,40 +78,10 @@ async function updateMoviesByGenre(genre) {
         `;
     });
 
-    
-    // Initialiser le bouton pour afficher plus de films
-    const seeMoreButton = document.getElementById("see-more-genre");
-    if (seeMoreButton) {
-        seeMoreButton.addEventListener('click', () => toggleMovies('genre-movies', 'see-more-genre'));
-    }
-
     addCardClickEvent("genre-movies", movies); // Associer les événements de clic
 
 }
 
-
-// Fonction pour peupler le menu déroulant des genres
-async function setupGenreDropdown() {
-    const genres = await fetchGenres();
-    const dropdownMenu = document.querySelector(".dropdown-menu");
-
-    // Ajouter les genres à la liste déroulante
-    genres.forEach((genre) => {
-        const listItem = document.createElement("li");
-        const button = document.createElement("button");
-        button.textContent = genre;
-        button.className = "dropdown-item";
-        button.type = "button";
-
-        // Ajouter un événement de clic
-        button.addEventListener("click", () => {
-            updateMoviesByGenre(genre); // Mettre à jour les films selon le genre
-        });
-
-        listItem.appendChild(button);
-        dropdownMenu.appendChild(listItem);
-    });
-}
 
 // Fonction pour gérer l'affichage de la modale avec les détails du film
 function displayMovieInModal(movie) {
