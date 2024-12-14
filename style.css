@@ -101,3 +101,24 @@ body {
         display: none !important;
     }
 }
+
+/* Pour les petites et moyennes résolutions : (le comportement par défaut) */
+.col-md-4 {
+    text-align: center; /* Centrer l'image pour les petites et moyennes résolutions */
+}
+
+/* Pour les grandes résolutions (992px et plus) */
+@media (max-width: 992px) {
+    .col-md-4 {
+        float: right; /* L'image se place à droite pour les grandes résolutions */
+        margin-left: 1px;
+        margin-right: 5px;
+        margin-bottom: 5px; /* Ajouter un espacement à gauche de l'image */
+        text-align: left; /* Assurez-vous que l'image ne soit pas centrée */
+    }
+
+    .modal-body .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
