@@ -109,42 +109,30 @@ function addCardClickEvent(containerId, movies) {
 // Fonction principale pour récupérer les films
 async function fetchMovieData() {
     const firstApiUrl = "http://localhost:8000/api/v1/titles/?&imdb_score_min=9.5";
-    const secondApiUrl = "http://localhost:8000/api/v1/titles/?&imdb_score_min=9.4";
-    const secondPageApiUrl = "http://localhost:8000/api/v1/titles/?imdb_score_min=9.4&page=2";
-    const thirdApiUrl = "http://localhost:8000/api/v1/titles/?&genre=Sci-Fi&imdb_score_min=8";
-    const thirdPageApiUrl = "http://localhost:8000/api/v1/titles/?&genre=Sci-Fi&imdb_score_min=8&page=2";
-    const fourthApiUrl = "http://localhost:8000/api/v1/titles/?&genre=History&imdb_score_min=8.8";
-    const fourthPageApiUrl = "http://localhost:8000/api/v1/titles/?&genre=History&imdb_score_min=8.8&page=2";
+    const secondApiUrl = "http://localhost:8000/api/v1/titles/?&imdb_score_min=9.4&page_size=25";
+    const thirdApiUrl = "http://localhost:8000/api/v1/titles/?&genre=Sci-Fi&imdb_score_min=8&page_size=25";
+    const fourthApiUrl = "http://localhost:8000/api/v1/titles/?&genre=History&imdb_score_min=8.8&page_size=25";
 
     try {
         // Effectuer les requêtes en parallèle
         const [
             firstResponse,
             secondResponse,
-            secondPageResponse,
             thirdResponse,
-            thirdPageResponse,
-            fourthResponse,
-            fourthPageResponse
+            fourthResponse
         ] = await Promise.all([
             fetch(firstApiUrl),
             fetch(secondApiUrl),
-            fetch(secondPageApiUrl),
             fetch(thirdApiUrl),
-            fetch(thirdPageApiUrl),
             fetch(fourthApiUrl),
-            fetch(fourthPageApiUrl)
         ]);
 
         // Vérifier les réponses
         if (
             !firstResponse.ok ||
             !secondResponse.ok ||
-            !secondPageResponse.ok ||
             !thirdResponse.ok ||
-            !thirdPageResponse.ok ||
-            !fourthResponse.ok ||
-            !fourthPageResponse.ok
+            !fourthResponse.ok
         ) {
             throw new Error("HTTP error! One or more requests failed.");
         }
@@ -152,11 +140,8 @@ async function fetchMovieData() {
         // Récupérer les données JSON
         const firstData = await firstResponse.json();
         const secondData = await secondResponse.json();
-        const secondPageData = await secondPageResponse.json();
         const thirdData = await thirdResponse.json();
-        const thirdPageData = await thirdPageResponse.json();
         const fourthData = await fourthResponse.json();
-        const fourthPageData = await fourthPageResponse.json();
 
         // *** Mise à jour des informations pour le meilleur film ***
         const movieWithMaxVotes = firstData.results.reduce((max, item) =>
@@ -187,13 +172,12 @@ async function fetchMovieData() {
         document.getElementById("modal-link").href = movieDetails.url;
 
         // *** Mise à jour des films les mieux notés (2e requête) ***
-        const combinedSecondQueryResults = [...secondData.results, ...secondPageData.results];
-        const topMoviesSecondQuery = combinedSecondQueryResults.slice(0, 6); // Limiter à 6 éléments
+        const topMoviesBestMovies = [...secondData.results].slice(0, 6);
         const topRatedMoviesContainer = document.getElementById("top-rated-movies");
         topRatedMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
 
         // Ajout des films selon les résolutions spécifiques
-        topMoviesSecondQuery.forEach((movie) => {
+        topMoviesBestMovies.forEach((movie) => {
             topRatedMoviesContainer.innerHTML += `
                 <div class="col-12 col-md-6 col-lg-4 movie">
                     <div class="card" style="cursor: pointer;">
@@ -207,11 +191,10 @@ async function fetchMovieData() {
         });
 
         // Ajouter l'événement de clic
-        addCardClickEvent("top-rated-movies", topMoviesSecondQuery);
+        addCardClickEvent("top-rated-movies", topMoviesBestMovies);
 
         // *** Mise à jour des films Sci-Fi (3e requête) ***
-        const combinedThirdQueryResults = [...thirdData.results, ...thirdPageData.results];
-        const topMoviesSciFi = combinedThirdQueryResults.slice(0, 6);
+        const topMoviesSciFi = [...thirdData.results].slice(0, 6);
         const sciFiMoviesContainer = document.getElementById("sci-fi-movies");
         sciFiMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
 
@@ -233,8 +216,7 @@ async function fetchMovieData() {
         addCardClickEvent("sci-fi-movies", topMoviesSciFi);
 
         // *** Mise à jour des films History (4e requête) ***
-        const combinedFourthQueryResults = [...fourthData.results, ...fourthPageData.results];
-        const topMoviesHistory = combinedFourthQueryResults.slice(0, 6);
+        const topMoviesHistory = [...fourthData.results].slice(0, 6);
         const historyMoviesContainer = document.getElementById("history-movies");
         historyMoviesContainer.innerHTML = ""; // Nettoyer avant l'injection
 
